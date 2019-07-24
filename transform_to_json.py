@@ -1,28 +1,10 @@
 # Imports
-import mysql.connector as mysql
-import numpy as np
-import json
-import os
-
-from datetime import datetime
 from itertools import groupby
-from decimal import Decimal
-from pandas import cut
+import json
 
 # Variables
-from config import mysql_config
 from sql_queries import sql_query
-
-def pull_data(sql_query):
-    cnx = mysql.connect(**mysql_config)
-    cursor = cnx.cursor()
-    cursor.execute(sql_query)
-
-    data = cursor.fetchall()
-    cursor.close()
-
-    if data:
-        return data
+from pull_data import pull_data
 
 def employees_list_json():
     data = pull_data(sql_query)
