@@ -1,4 +1,4 @@
-employee_list_query = '''
+sql_query = '''
     SELECT
         DISTINCT(e.emp_no) AS EmployeeNum,
         birth_date AS DOB,
@@ -7,7 +7,7 @@ employee_list_query = '''
         gender AS Gender,
         hire_date AS HireDate,
         (
-            SELECT FORMAT(salary, 2) 
+            SELECT salary
             FROM salaries s 
             WHERE s.emp_no = e.emp_no 
             ORDER BY s.to_date DESC LIMIT 1
@@ -31,5 +31,5 @@ employee_list_query = '''
         ) AS Title
     FROM employees e
     ORDER BY EmployeeNum
-    LIMIT 100; 
+    LIMIT 2000; 
 '''
