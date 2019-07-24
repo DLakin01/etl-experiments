@@ -42,7 +42,7 @@ def employees_list_json():
         
         employee_list.append(employee)
 
-    with open("/Users/macbook/Desktop/employees_list.json", 'w+') as json_file:
+    with open("/Users/macbook/Desktop/employees_list.json", 'w') as json_file:
         json.dump(employee_list, json_file)
 
 def salary_list_json():
@@ -70,13 +70,42 @@ def salary_list_json():
         
         salary_list.append(item)
 
-    with open("/Users/macbook/Desktop/salary_list.json", "w+") as json_file:
+    with open("/Users/macbook/Desktop/salary_list.json", "w") as json_file:
         json.dump(salary_list, json_file)
 
 
+def department_list_json():
+    data = pull_data(sql_query)
+    department_list = []
+
+    data = sorted(data, key=lambda x: x[7])
+    for i, g in groupby(data, lambda x: x[7]):
+        employees_in_department = list(g)
+        item = {}
+        item["Department"] = employees_in_department[0][7]
+        item["Employees"] = []
+
+        for e in employees_in_department:
+            employee = {}
+            employee["EmployeeNum"] = e[0]
+            employee["Name"] = f"{e[2]} {e[3]}"
+            employee["HireDate"] = '{:%m/%d/%Y}'.format(e[5])
+            employee["Title"] = e[8]
+            employee["Salary"] = e[6]
+            employee["Department"] = e[7]
+            item["Employees"].append(employee)
+
+        department_list.append(item)
+
+    with open("/Users/macbook/Desktop/department_list.json", "w") as json_file:
+        json.dump(department_list, json_file)
+
+    print("Generated JSON")
+        
 def main():
     #employees_list_json()
-    salary_list_json()
+    #salary_list_json()
+    department_list_json()
 
 if __name__ == "__main__":
     main()
