@@ -86,9 +86,50 @@ def salary_list_xml():
 
     print("Generated XML")
 
+
+def department_list_xml():
+    data = pull_data(sql_query)
+    department_xml = ET.Element("DepartmentList")
+    departments = ET.SubElement(department_xml, "Departments")
+
+    data = sorted(data, key = lambda x: x[7])
+    for i, g in groupby(data, lambda x: x[7]):
+        employees_in_department = list(g)
+
+        current_department = employees_in_department[0][7]
+        current_department = current_department.replace(" ", "")
+
+        dep = ET.SubElement(departments, current_department)
+        employees = ET.SubElement(dep, "Employees")
+
+        for e in employees_in_department:
+            employee = ET.SubElement(employees, "empl")
+
+            emp_id = ET.SubElement(employee, "Id")
+            emp_id.text = str(e[0])
+
+            name = ET.SubElement(employee, "FullName")
+            name.text = f"{e[2]} {e[3]}"
+
+            hire_date = ET.SubElement(employee, "HireDate")
+            hire_date.text = '{:%m/%d/%Y}'.format(e[5])
+
+            title = ET.SubElement(employee, "CurrentTitle")
+            title.text = e[8]
+
+            salary = ET.SubElement(employee, "CurrentSalary")
+            salary.text = str(e[6])
+
+    xml = ET.tostring(department_xml)
+    destination_file = open("/Users/macbook/Desktop/department_list.xml", "wb")
+    destination_file.write(xml)
+
+    print("Generated XML")
+
 def main():
     #employees_list_xml()
-    salary_list_xml()
+    #salary_list_xml()
+    department_list_xml()
 
 if __name__ == "__main__":
     main()
